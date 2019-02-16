@@ -39,9 +39,9 @@ VERBOSE=:
 
 function _hash()
 {
-	local file="$1"
-	local hash=($(sha256sum "$file"))
-	echo "${hash[0]}"
+    local file="$1"
+    local hash=($(sha256sum "$file"))
+    echo "${hash[0]}"
 }
 
 
@@ -50,7 +50,7 @@ function _hash()
 # Usage: list_stamps
 function list_stamps()
 {
-	curl -s \
+    curl -s \
         -u "$API_CLIENT_ID:$API_SECRET" \
         $API_ENTRY_POINT/stamps | jq
 }
@@ -60,10 +60,10 @@ function list_stamps()
 # Usage: list_receipts_by_file <filename>
 function list_receipts_by_file()
 {
-	local file="$1"
-	local hash="$(_hash "$file")"
+    local file="$1"
+    local hash="$(_hash "$file")"
 
-	curl -s \
+    curl -s \
         -u "$API_CLIENT_ID:$API_SECRET" \
         $API_ENTRY_POINT/stamps/$hash | jq
 }
@@ -73,9 +73,9 @@ function list_receipts_by_file()
 # Usage: list_receipts_by_id <stamp_id>
 function list_receipts_by_id()
 {
-	local id="$1"
+    local id="$1"
 
-	curl -s \
+    curl -s \
         -u "$API_CLIENT_ID:$API_SECRET" \
         $API_ENTRY_POINT/stamps/$id | jq
 }
@@ -85,22 +85,22 @@ function list_receipts_by_id()
 # Usage: stamp <filename>
 function stamp()
 {
-	local file="$1"
-	local hash="$(_hash "$file")"
-	local response time id
-	
-	response="$(curl -s -X POST            \
+    local file="$1"
+    local hash="$(_hash "$file")"
+    local response time id
+
+    response="$(curl -s -X POST            \
         -u "$API_CLIENT_ID:$API_SECRET"    \
         -H 'Content-Type:application/json' \
         -d "{\"hash\": \"$hash\"}"         \
         $API_ENTRY_POINT/stamps)"
 
-	time=$(echo "$response" | jq -r .result.time)
-	id=$(echo "$response" | jq -r .result.id)
+    time=$(echo "$response" | jq -r .result.time)
+    id=$(echo "$response" | jq -r .result.id)
 
-	$VERBOSE "Response time: $time"
+    $VERBOSE "Response time: $time"
 
-	echo $id
+    echo $id
 }
 
 # Download an OTS receipt
@@ -108,11 +108,11 @@ function stamp()
 # Usage: get_ots_receipt <stamp_id>
 function get_ots_receipt()
 {
-	local id="$1"
+    local id="$1"
 
-	curl -s -O \
-        -u "$API_CLIENT_ID:$API_SECRET" \
-        $API_ENTRY_POINT/stamps/${id}.ots
+    curl -s -O \
+    -u "$API_CLIENT_ID:$API_SECRET" \
+    $API_ENTRY_POINT/stamps/${id}.ots
 }
 
 # Download a human-readable receipt
@@ -120,11 +120,11 @@ function get_ots_receipt()
 # Usage: get_pdf_receipt <stamp_id>
 function get_pdf_receipt()
 {
-	local id="$1"
+    local id="$1"
 
-	curl -s -O \
-        -u "$API_CLIENT_ID:$API_SECRET" \
-        $API_ENTRY_POINT/stamps/${id}.pdf
+    curl -s -O \
+    -u "$API_CLIENT_ID:$API_SECRET" \
+    $API_ENTRY_POINT/stamps/${id}.pdf
 }
 
 # Print info about an OTS receipt
@@ -132,9 +132,9 @@ function get_pdf_receipt()
 # Usage: info_ots_receipt <ots_file>
 function info_ots_receipt()
 {
-	local ots="$1"
+    local ots="$1"
 
-	ots info "$ots"
+    ots info "$ots"
 }
 
 # Verify an OTS receipt
@@ -142,9 +142,9 @@ function info_ots_receipt()
 # Usage: verify_ots_receipt <ots_file>
 function verify_ots_receipt()
 {
-	local ots="$1"
+    local ots="$1"
 
-	ots verify "$ots"
+    ots verify "$ots"
 }
 
 # Local variables:
