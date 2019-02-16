@@ -31,8 +31,8 @@
 
 API_ENTRY_POINT=https://api-prod.stampery.com
 
-API_CLIENT_ID=3ecd03f89f88eb9
-API_SECRET=ecd661b3-bd09-4b4e-dad2-1f644873b368
+API_CLIENT_ID=
+API_SECRET=
 
 VERBOSE=:
 
