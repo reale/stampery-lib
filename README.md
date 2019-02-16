@@ -9,7 +9,7 @@ The library uses the [Stampery API](https://api.stampery.com/) which allows to p
 * the command line JSON processor [jq](https://stedolan.github.io/jq/)
 * the [OpenTimestamps client](https://github.com/opentimestamps/opentimestamps-client)
 
-### Examples
+### Usage
 
 ```
 $ source stampery-lib
