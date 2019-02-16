@@ -1,0 +1,97 @@
+#!/bin/bash
+
+# https://api.stampery.com/
+
+API_ENTRY_POINT=https://api-prod.stampery.com
+
+API_CLIENT_ID=3ecd03f89f88eb9
+API_SECRET=ecd661b3-bd09-4b4e-dad2-1f644873b368
+
+VERBOSE=:
+
+
+function _hash()
+{
+	local file="$1"
+	local hash=($(sha256sum "$file"))
+	echo "${hash[0]}"
+}
+
+
+function list_stamps()
+{
+	curl -s \
+	  -u "$API_CLIENT_ID:$API_SECRET" \
+	  $API_ENTRY_POINT/stamps | jq
+}
+
+function list_receipts_by_file()
+{
+	local file="$1"
+	local hash="$(_hash "$file")"
+
+	curl -s \
+	  -u "$API_CLIENT_ID:$API_SECRET" \
+	  $API_ENTRY_POINT/stamps/$hash | jq
+}
+
+function list_receipts_by_id()
+{
+	local id="$1"
+
+	curl -s \
+	  -u "$API_CLIENT_ID:$API_SECRET" \
+	  $API_ENTRY_POINT/stamps/$id | jq
+}
+
+function stamp()
+{
+	local file="$1"
+	local hash="$(_hash "$file")"
+	local response time id
+	
+	response="$(curl -s -X POST \
+	  -u "$API_CLIENT_ID:$API_SECRET" \
+	  -H 'Content-Type:application/json' \
+	  -d "{\"hash\": \"$hash\"}" \
+	  $API_ENTRY_POINT/stamps)"
+
+	time=$(echo "$response" | jq -r .result.time)
+	id=$(echo "$response" | jq -r .result.id)
+
+	$VERBOSE "Response time: $time"
+
+	echo $id
+}
+
+function get_ots_receipt()
+{
+	local id="$1"
+
+	curl -s -O \
+	  -u "$API_CLIENT_ID:$API_SECRET" \
+	  $API_ENTRY_POINT/stamps/${id}.ots
+}
+
+function get_pdf_receipt()
+{
+	local id="$1"
+
+	curl -s -O \
+	  -u "$API_CLIENT_ID:$API_SECRET" \
+	  $API_ENTRY_POINT/stamps/${id}.pdf
+}
+
+function info_ots_receipt()
+{
+	local ots="$1"
+
+	ots info "$ots"
+}
+
+function verify_ots_receipt()
+{
+	local ots="$1"
+
+	ots verify "$ots"
+}
