@@ -28,11 +28,11 @@
 
 
 # https://api.stampery.com/
-
 API_ENTRY_POINT=https://api-prod.stampery.com
 
-API_CLIENT_ID=
-API_SECRET=
+# You must define the following (see https://api-dashboard.stampery.com/)
+# API_CLIENT_ID=
+# API_SECRET=
 
 VERBOSE=:
 
@@ -45,6 +45,9 @@ function _hash()
 }
 
 
+# List all stamps
+#
+# Usage: list_stamps
 function list_stamps()
 {
 	curl -s \
@@ -52,6 +55,9 @@ function list_stamps()
         $API_ENTRY_POINT/stamps | jq
 }
 
+# Retrieve all receipts for a given file
+#
+# Usage: list_receipts_by_file <filename>
 function list_receipts_by_file()
 {
 	local file="$1"
@@ -62,6 +68,9 @@ function list_receipts_by_file()
         $API_ENTRY_POINT/stamps/$hash | jq
 }
 
+# Retrieve all receipts for a given stamp ID
+#
+# Usage: list_receipts_by_id <stamp_id>
 function list_receipts_by_id()
 {
 	local id="$1"
@@ -71,6 +80,9 @@ function list_receipts_by_id()
         $API_ENTRY_POINT/stamps/$id | jq
 }
 
+# Create a timestamp for a given file
+#
+# Usage: stamp <filename>
 function stamp()
 {
 	local file="$1"
@@ -91,6 +103,9 @@ function stamp()
 	echo $id
 }
 
+# Download an OTS receipt
+#
+# Usage: get_ots_receipt <stamp_id>
 function get_ots_receipt()
 {
 	local id="$1"
@@ -100,6 +115,9 @@ function get_ots_receipt()
         $API_ENTRY_POINT/stamps/${id}.ots
 }
 
+# Download a human-readable receipt
+#
+# Usage: get_pdf_receipt <stamp_id>
 function get_pdf_receipt()
 {
 	local id="$1"
@@ -109,6 +127,9 @@ function get_pdf_receipt()
         $API_ENTRY_POINT/stamps/${id}.pdf
 }
 
+# Print info about an OTS receipt
+#
+# Usage: info_ots_receipt <ots_file>
 function info_ots_receipt()
 {
 	local ots="$1"
@@ -116,6 +137,9 @@ function info_ots_receipt()
 	ots info "$ots"
 }
 
+# Verify an OTS receipt
+#
+# Usage: verify_ots_receipt <ots_file>
 function verify_ots_receipt()
 {
 	local ots="$1"
