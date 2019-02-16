@@ -1,5 +1,32 @@
 #!/bin/bash
 
+################################################################################
+#                                        
+# A basic Linux library to stamp files based on the blockchain
+#
+# Copyright (c) 2019 Roberto Reale
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+################################################################################
+
+
 # https://api.stampery.com/
 
 API_ENTRY_POINT=https://api-prod.stampery.com
@@ -21,8 +48,8 @@ function _hash()
 function list_stamps()
 {
 	curl -s \
-	  -u "$API_CLIENT_ID:$API_SECRET" \
-	  $API_ENTRY_POINT/stamps | jq
+        -u "$API_CLIENT_ID:$API_SECRET" \
+        $API_ENTRY_POINT/stamps | jq
 }
 
 function list_receipts_by_file()
@@ -31,8 +58,8 @@ function list_receipts_by_file()
 	local hash="$(_hash "$file")"
 
 	curl -s \
-	  -u "$API_CLIENT_ID:$API_SECRET" \
-	  $API_ENTRY_POINT/stamps/$hash | jq
+        -u "$API_CLIENT_ID:$API_SECRET" \
+        $API_ENTRY_POINT/stamps/$hash | jq
 }
 
 function list_receipts_by_id()
@@ -40,8 +67,8 @@ function list_receipts_by_id()
 	local id="$1"
 
 	curl -s \
-	  -u "$API_CLIENT_ID:$API_SECRET" \
-	  $API_ENTRY_POINT/stamps/$id | jq
+        -u "$API_CLIENT_ID:$API_SECRET" \
+        $API_ENTRY_POINT/stamps/$id | jq
 }
 
 function stamp()
@@ -50,11 +77,11 @@ function stamp()
 	local hash="$(_hash "$file")"
 	local response time id
 	
-	response="$(curl -s -X POST \
-	  -u "$API_CLIENT_ID:$API_SECRET" \
-	  -H 'Content-Type:application/json' \
-	  -d "{\"hash\": \"$hash\"}" \
-	  $API_ENTRY_POINT/stamps)"
+	response="$(curl -s -X POST            \
+        -u "$API_CLIENT_ID:$API_SECRET"    \
+        -H 'Content-Type:application/json' \
+        -d "{\"hash\": \"$hash\"}"         \
+        $API_ENTRY_POINT/stamps)"
 
 	time=$(echo "$response" | jq -r .result.time)
 	id=$(echo "$response" | jq -r .result.id)
@@ -69,8 +96,8 @@ function get_ots_receipt()
 	local id="$1"
 
 	curl -s -O \
-	  -u "$API_CLIENT_ID:$API_SECRET" \
-	  $API_ENTRY_POINT/stamps/${id}.ots
+        -u "$API_CLIENT_ID:$API_SECRET" \
+        $API_ENTRY_POINT/stamps/${id}.ots
 }
 
 function get_pdf_receipt()
@@ -78,8 +105,8 @@ function get_pdf_receipt()
 	local id="$1"
 
 	curl -s -O \
-	  -u "$API_CLIENT_ID:$API_SECRET" \
-	  $API_ENTRY_POINT/stamps/${id}.pdf
+        -u "$API_CLIENT_ID:$API_SECRET" \
+        $API_ENTRY_POINT/stamps/${id}.pdf
 }
 
 function info_ots_receipt()
@@ -95,3 +122,11 @@ function verify_ots_receipt()
 
 	ots verify "$ots"
 }
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh
