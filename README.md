@@ -15,3 +15,5 @@ The library uses the [Stampery API](https://api.stampery.com/) which allows to p
 $ source stampery-lib
 $ stamp <file>
 ```
+
+A video clip demonstrating a typical usage pattern is available at https://youtu.be/8AtweGnW7Kk.
