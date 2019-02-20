@@ -12,8 +12,15 @@ The library uses the [Stampery API](https://api.stampery.com/) which allows to p
 ### Usage
 
 ```
+$ export API_CLIENT_ID=<your client ID>
+$ export API_SECRET=<your secret key>
+
 $ source stampery-lib
+
 $ stamp <file>
+5c6b36de4c7c43000408ff93
+
+$ list_receipts_by_id 5c6b36de4c7c43000408ff93
 ```
 
 A video clip demonstrating a typical usage pattern is available at https://youtu.be/8AtweGnW7Kk.
